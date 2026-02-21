@@ -1,0 +1,432 @@
+[
+  {
+    "code": "PMP001",
+    "name": "Centrifugal Pump - Water Supply",
+    "activation_cost": 50.5,
+    "availability": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "volume": 15
+  },
+  {
+    "code": "MTR002",
+    "name": "Electric Motor - Conveyor Belt",
+    "activation_cost": 75,
+    "availability": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "volume": 22
+  },
+  {
+    "code": "CMP003",
+    "name": "Air Compressor - Manufacturing Line",
+    "activation_cost": 120,
+    "availability": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "volume": 45
+  },
+  {
+    "code": "BLR004",
+    "name": "Steam Boiler - Heating System",
+    "activation_cost": 200,
+    "availability": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "volume": 150
+  },
+  {
+    "code": "FAN005",
+    "name": "Industrial Fan - Ventilation",
+    "activation_cost": 30.5,
+    "availability": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "volume": 8
+  },
+  {
+    "code": "CNV006",
+    "name": "Conveyor System - Assembly Line",
+    "activation_cost": 90,
+    "availability": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "volume": 35
+  },
+  {
+    "code": "GEN007",
+    "name": "Generator - Backup Power",
+    "activation_cost": 300,
+    "availability": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "volume": 200
+  },
+  {
+    "code": "CHL008",
+    "name": "Chiller Unit - Cooling System",
+    "activation_cost": 180,
+    "availability": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "volume": 85
+  },
+  {
+    "code": "MIX009",
+    "name": "Mixer - Chemical Processing",
+    "activation_cost": 65,
+    "availability": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "volume": 28
+  },
+  {
+    "code": "CRN010",
+    "name": "Crane - Material Handling",
+    "activation_cost": 150,
+    "availability": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "volume": 60
+  },
+  {
+    "code": "WEL011",
+    "name": "Welding Machine - Fabrication",
+    "activation_cost": 40,
+    "availability": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "volume": 18
+  },
+  {
+    "code": "PRT012",
+    "name": "Printer - Label Production",
+    "activation_cost": 25.5,
+    "availability": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "volume": 5
+  },
+  {
+    "code": "ROB013",
+    "name": "Industrial Robot - Assembly",
+    "activation_cost": 250,
+    "availability": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "volume": 12
+  },
+  {
+    "code": "OVN014",
+    "name": "Industrial Oven - Drying Process",
+    "activation_cost": 110,
+    "availability": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "volume": 75
+  },
+  {
+    "code": "FLT015",
+    "name": "Filtration System - Water Treatment",
+    "activation_cost": 85,
+    "availability": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "volume": 20
+  },
+  {
+    "code": "PMP016",
+    "name": "Slurry Pump - Mining Operation",
+    "activation_cost": 95,
+    "availability": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "volume": 55
+  },
+  {
+    "code": "MTR017",
+    "name": "High-Voltage Motor - Crusher",
+    "activation_cost": 180,
+    "availability": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "volume": 120
+  },
+  {
+    "code": "CMP018",
+    "name": "Refrigeration Compressor - Cold Storage",
+    "activation_cost": 140,
+    "availability": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "volume": 65
+  },
+  {
+    "code": "BLR019",
+    "name": "Hot Water Boiler - Process Heating",
+    "activation_cost": 160,
+    "availability": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "volume": 110
+  },
+  {
+    "code": "FAN020",
+    "name": "Exhaust Fan - Fume Extraction",
+    "activation_cost": 35,
+    "availability": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "volume": 12
+  },
+  {
+    "code": "PMP021",
+    "name": "Backup Pump - Emergency Water Supply",
+    "activation_cost": 70,
+    "availability": [
+      1,
+      2
+    ],
+    "volume": 18
+  },
+  {
+    "code": "MTR022",
+    "name": "Maintenance Motor - Spare Parts Testing",
+    "activation_cost": 55,
+    "availability": [
+      3,
+      4
+    ],
+    "volume": 25
+  },
+  {
+    "code": "CMP023",
+    "name": "Portable Compressor - Mobile Unit",
+    "activation_cost": 100,
+    "availability": [
+      5
+    ],
+    "volume": 30
+  },
+  {
+    "code": "BLR024",
+    "name": "Weekend Boiler - Backup Heating",
+    "activation_cost": 220,
+    "availability": [
+      6,
+      7
+    ],
+    "volume": 140
+  },
+  {
+    "code": "FAN025",
+    "name": "Spot Fan - Localized Cooling",
+    "activation_cost": 20,
+    "availability": [
+      1
+    ],
+    "volume": 6
+  },
+  {
+    "code": "CNV026",
+    "name": "Auxiliary Conveyor - Loading Dock",
+    "activation_cost": 80,
+    "availability": [
+      2,
+      3
+    ],
+    "volume": 40
+  },
+  {
+    "code": "GEN027",
+    "name": "Portable Generator - Field Operations",
+    "activation_cost": 280,
+    "availability": [
+      4,
+      5
+    ],
+    "volume": 180
+  },
+  {
+    "code": "CHL028",
+    "name": "Small Chiller - Lab Cooling",
+    "activation_cost": 120,
+    "availability": [
+      1,
+      2,
+      3
+    ],
+    "volume": 50
+  },
+  {
+    "code": "MIX029",
+    "name": "Batch Mixer - Quality Control",
+    "activation_cost": 60,
+    "availability": [
+      4
+    ],
+    "volume": 32
+  },
+  {
+    "code": "CRN030",
+    "name": "Overhead Crane - Warehouse",
+    "activation_cost": 170,
+    "availability": [
+      1,
+      5
+    ],
+    "volume": 70
+  },
+  {
+    "code": "WEL031",
+    "name": "Spot Welder - Prototype Assembly",
+    "activation_cost": 45,
+    "availability": [
+      2,
+      4
+    ],
+    "volume": 20
+  },
+  {
+    "code": "PRT032",
+    "name": "High-Speed Printer - Rush Orders",
+    "activation_cost": 30,
+    "availability": [
+      3
+    ],
+    "volume": 7
+  },
+  {
+    "code": "ROB033",
+    "name": "Collaborative Robot - Testing Lab",
+    "activation_cost": 200,
+    "availability": [
+      1,
+      2
+    ],
+    "volume": 15
+  },
+  {
+    "code": "OVN034",
+    "name": "Curing Oven - Paint Shop",
+    "activation_cost": 130,
+    "availability": [
+      5,
+      6
+    ],
+    "volume": 80
+  },
+  {
+    "code": "FLT035",
+    "name": "Emergency Filtration - Spill Response",
+    "activation_cost": 90,
+    "availability": [
+      7
+    ],
+    "volume": 25
+  }
+]
