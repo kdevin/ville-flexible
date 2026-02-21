@@ -24,3 +24,7 @@ Project structure is inspired by [Netflix Dispatch](https://github.com/Netflix/d
 ### Install your optional dependencies from pyproject.toml
 
     pip install .[test]
+
+### Execute pre-commit
+
+    pre-commit run --all-files
