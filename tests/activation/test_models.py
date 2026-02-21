@@ -1,40 +1,72 @@
 from pydantic import ValidationError
 import pytest
 
-from ville_flexible.activation.models import Asset
+from ville_flexible.activation.models import ActivationRequest, ActivationResponse
+from ville_flexible.asset.models import Asset, AvailableAsset
 
 
 @pytest.mark.parametrize(
-    "code, name, activation_cost, availability, volume",
+    "date, volume",
     [
-        ("A1", "Asset 1", 100.0, [1, 2, 3], 10),
-        ("A2", "Asset 2", 200.0, [4, 5, 6], 20),
+        (1, 100),
+        (2, 200),
     ],
 )
-def test_asset(code, name, activation_cost, availability, volume):
-    # Arrange
-
+def test_activation_request(date: int, volume: int):
     # Act
     try:
-        Asset(code=code, name=name, activation_cost=activation_cost, availability=availability, volume=volume)
+        ActivationRequest(date=date, volume=volume)
     except Exception as e:
-        pytest.fail(f"Asset creation failed with error: {e}")
+        pytest.fail(f"ActivationRequest creation failed with error: {e}")
 
 
 @pytest.mark.parametrize(
-    "code, name, activation_cost, availability, volume",
+    "date, volume",
     [
-        (123, "Asset 1", 100.0, [1, 2, 3], 10),  # Invalid code type
-        ("A2", 456, 200.0, [4, 5, 6], 20),  # Invalid name type
-        ("A3", "Asset 3", "invalid_cost", [7, 8, 9], 30),  # Invalid activation_cost type
-        ("A4", "Asset 4", 300.0, "invalid_availability", 40),  # Invalid availability type
-        ("A5", "Asset 5", 400.0, [10, 11, 12], "invalid_volume"),  # Invalid volume type
+        ("invalid_date", 100),  # Invalid date type
+        (1, "invalid_volume"),  # Invalid volume type
     ],
-    ids=["invalid_code", "invalid_name", "invalid_activation_cost", "invalid_availability", "invalid_volume"],
+    ids=["invalid date", "invalid volume"],
 )
-def test_asset_invalid_data(code, name, activation_cost, availability, volume):
-    # Arrange
+def test_activation_request_invalid_data(date: int, volume: int):
+    # Act
+    with pytest.raises((ValueError, ValidationError)):
+        ActivationRequest(date=date, volume=volume)
 
-    # Act & Assert
-    with pytest.raises(ValidationError):
-        Asset(code=code, name=name, activation_cost=activation_cost, availability=availability, volume=volume)
+
+@pytest.mark.parametrize(
+    "available_assets",
+    [
+        [],
+        [
+            AvailableAsset(code="A1", name="Asset 1", activation_cost=100.0, volume=10),
+        ],
+        [
+            AvailableAsset(code="A2", name="Asset 2", activation_cost=200.0, volume=20),
+            AvailableAsset(code="A3", name="Asset 3", activation_cost=300.0, volume=30),
+        ],
+    ],
+)
+def test_activation_response(available_assets: list[AvailableAsset]):
+    # Act
+    try:
+        ActivationResponse(assets=available_assets)
+    except Exception as e:
+        pytest.fail(f"ActivationResponse creation failed with error: {e}")
+
+
+@pytest.mark.parametrize(
+    "available_assets",
+    [
+        [1, 2],
+        ["1", "2"],
+        [
+            Asset(code="A1", name="Asset 1", activation_cost=100.0, availability=[1, 2, 3], volume=10),
+            Asset(code="A2", name="Asset 2", activation_cost=200.0, availability=[1, 2, 3], volume=20),
+        ],
+    ],
+)
+def test_activation_response_invalid_data(available_assets: list[AvailableAsset]):
+    # Act
+    with pytest.raises((ValueError, ValidationError)):
+        ActivationResponse(assets=available_assets)

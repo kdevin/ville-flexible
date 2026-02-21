@@ -16,6 +16,7 @@ test = [
     "coverage==7.13.4",
     "pre-commit==2.15.0",
     "pytest==9.0.2",
+    "pytest-cov==7.0.0",
     "ruff==0.15.2",
 ]
 
@@ -51,7 +52,7 @@ exclude = [
 ]
 
 # Same as Black.
-line-length = 100
+line-length = 120
 
 # Assume Python 3.12
 target-version = "py312"
