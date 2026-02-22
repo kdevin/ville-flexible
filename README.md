@@ -26,7 +26,7 @@ You can also install your optional dependencies
 
 Start your FastAPI server
 
-    fastapi run ville_flexible/main.py
+    uvicorn ville_flexible.main:app --host 0.0.0.0 --port 8000
 
 Server is started at: http://127.0.0.1:8000<br>
 Access to the Swagger docs at: http://127.0.0.1:8000/docs

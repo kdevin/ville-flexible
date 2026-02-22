@@ -37,4 +37,4 @@ COPY ./ville_flexible /app/ville_flexible
 EXPOSE 8000
 
 # Run FastAPI app
-CMD ["fastapi", "run", "ville_flexible/main.py", "--port", "8000"]
+CMD ["uvicorn", "ville_flexible.main:app", "--host", "0.0.0.0", "--port", "8000"]
