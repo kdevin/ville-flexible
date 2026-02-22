@@ -1,22 +1,27 @@
+from abc import ABC, abstractmethod
+
 from ville_flexible.activation.models import ActivationRequest
 from ville_flexible.asset.models import AvailableAsset
 from ville_flexible.asset.service import AssetService
 
 
-class ActivationStrategy:
+class AbstractActivationStrategy(ABC):
     """
     Abstract base class for activation strategies.
     """
 
+    @abstractmethod
     def select_available_assets(
-        self, activation_request: ActivationRequest, available_assets: list[AvailableAsset]
+        self,
+        activation_request: ActivationRequest,
+        available_assets: list[AvailableAsset],
     ) -> list[AvailableAsset]:
         raise NotImplementedError("Subclasses must implement this method")
 
 
-class MinizeTotalCostStrategy(ActivationStrategy):
+class MinimizeTotalCostStrategy(AbstractActivationStrategy):
     """
-    Concrete implementation of ActivationStrategy that minimizes the total cost of activation.
+    Concrete implementation of AbstractActivationStrategy that minimizes the total cost of activation.
     """
 
     def select_available_assets(
@@ -37,7 +42,7 @@ class ActivationService:
         strategy (ActivationStrategy): The strategy to be used for computing the activation list.
     """
 
-    def __init__(self, asset_service: AssetService, strategy: ActivationStrategy = MinizeTotalCostStrategy()):
+    def __init__(self, asset_service: AssetService, strategy: AbstractActivationStrategy = MinimizeTotalCostStrategy()):
         self.asset_service = asset_service
         self.strategy = strategy
 
@@ -50,6 +55,6 @@ class ActivationService:
         Returns:
             list[AvailableAsset]: A list of available assets that should be activated to meet the request.
         """
-
         available_assets = self.asset_service.get_available_assets(activation_request.date)
+
         return self.strategy.select_available_assets(activation_request, available_assets)
