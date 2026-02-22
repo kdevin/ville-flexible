@@ -31,6 +31,16 @@ Start your FastAPI server
 Server is started at: http://127.0.0.1:8000<br>
 Access to the Swagger docs at: http://127.0.0.1:8000/docs
 
+## Containerize the project
+
+Build the docker image
+
+    docker build -t ville-flexible:latest .
+
+Run the docker image
+
+    docker run -d -p 127.0.0.1:8000:8000 ville-flexible
+
 ## Useful commands
 
 Execute pre-commit
