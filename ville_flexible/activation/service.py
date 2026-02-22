@@ -19,9 +19,10 @@ class AbstractActivationStrategy(ABC):
         raise NotImplementedError("Subclasses must implement this method")
 
 
-class MinimizeTotalCostStrategy(AbstractActivationStrategy):
+class CheapestAssetCoveringRequestVolumeStrategy(AbstractActivationStrategy):
     """
-    Concrete implementation of AbstractActivationStrategy that minimizes the total cost of activation.
+    Concrete implementation of AbstractActivationStrategy that finds
+    the cheapest asset's activation cost also covering the request volume.
     """
 
     def select_available_assets(
@@ -29,9 +30,12 @@ class MinimizeTotalCostStrategy(AbstractActivationStrategy):
         activation_request: ActivationRequest,
         available_assets: list[AvailableAsset],
     ) -> list[AvailableAsset]:
-        # TODO rate the assets based on their cost and volume
-        # TODO select the ones that minimize the total cost while covering the requested volume
-        raise NotImplementedError("This strategy is not yet implemented")
+        asset_covering_requested_volume = [
+            asset for asset in available_assets if asset.rate_requested_volume(activation_request.volume) >= 1
+        ]
+        cheapest_asset = min(asset_covering_requested_volume, key=lambda x: x.activation_cost)
+
+        return [cheapest_asset]
 
 
 class ActivationService:
@@ -42,7 +46,7 @@ class ActivationService:
         strategy (ActivationStrategy): The strategy to be used for computing the activation list.
     """
 
-    def __init__(self, asset_service: AssetService, strategy: AbstractActivationStrategy = MinimizeTotalCostStrategy()):
+    def __init__(self, asset_service: AssetService, strategy: AbstractActivationStrategy):
         self.asset_service = asset_service
         self.strategy = strategy
 

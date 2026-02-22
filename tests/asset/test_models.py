@@ -57,6 +57,37 @@ def test_asset_invalid_data(code, name, activation_cost, availability, volume):
 
 
 @pytest.mark.parametrize(
+    "asset, expected_cost_per_volume",
+    [
+        (Asset(code="A1", name="Asset 1", activation_cost=100.0, availability=[1, 2, 3], volume=10), 10.0),
+        (Asset(code="A2", name="Asset 2", activation_cost=200.0, availability=[4, 5, 6], volume=10), 20.0),
+        (Asset(code="A3", name="Asset 3", activation_cost=300.0, availability=[7], volume=10), 30.0),
+        (Asset(code="A4", name="Asset 4", activation_cost=100.0, availability=[1, 2, 3], volume=0), 0.0),
+    ],
+)
+def test_asset_cost_per_volume(asset: Asset, expected_cost_per_volume: float):
+    # Act
+    cost_per_volume = asset.cost_per_volume
+
+    # Assert
+    assert cost_per_volume == expected_cost_per_volume
+
+
+@pytest.mark.parametrize(
+    "asset, week_day, expected_availability",
+    [
+        (Asset(code="A1", name="Asset 1", activation_cost=100.0, availability=[1, 2, 3], volume=10), 1, True),
+        (Asset(code="A1", name="Asset 1", activation_cost=100.0, availability=[1, 2, 3], volume=10), 4, False),
+        (Asset(code="A2", name="Asset 2", activation_cost=200.0, availability=[4, 5, 6, 7], volume=20), 5, True),
+        (Asset(code="A2", name="Asset 2", activation_cost=200.0, availability=[4, 5, 6, 7], volume=20), 3, False),
+    ],
+)
+def test_asset_is_available_on_date(asset: Asset, week_day: int, expected_availability: bool):
+    # Act & Assert
+    assert asset.is_available_on_date(week_day) is expected_availability
+
+
+@pytest.mark.parametrize(
     "code, name, activation_cost, volume",
     [
         ("A1", "Asset 1", 100.0, 10),
@@ -101,3 +132,22 @@ def test_available_asset_from_asset():
     assert available_asset.name == asset.name
     assert available_asset.activation_cost == asset.activation_cost
     assert available_asset.volume == asset.volume
+
+
+@pytest.mark.parametrize(
+    "asset, requested_volume, expected_rate",
+    [
+        (AvailableAsset(code="A1", name="Asset 1", activation_cost=100.0, volume=10), 5, 2.0),
+        (AvailableAsset(code="A2", name="Asset 2", activation_cost=200.0, volume=20), 10, 2.0),
+        (AvailableAsset(code="A3", name="Asset 3", activation_cost=300.0, volume=30), 30, 1.0),
+        (AvailableAsset(code="A4", name="Asset 4", activation_cost=400.0, volume=40), 50, 0.8),
+        (AvailableAsset(code="A5", name="Asset 5", activation_cost=500.0, volume=0), 10, 0.0),
+        (AvailableAsset(code="A6", name="Asset 6", activation_cost=600.0, volume=10), 0, 0.0),
+    ],
+)
+def test_available_asset_rate_requested_volume(asset: AvailableAsset, requested_volume: int, expected_rate: float):
+    # Act
+    rate = asset.rate_requested_volume(requested_volume)
+
+    # Assert
+    assert rate == expected_rate

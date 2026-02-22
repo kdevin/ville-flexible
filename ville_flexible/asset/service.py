@@ -9,5 +9,5 @@ class AssetService:
         return [
             AvailableAsset(**asset.model_dump())
             for asset in self.assets
-            if week_day in asset.availability
+            if asset.is_available_on_date(week_day)
         ]

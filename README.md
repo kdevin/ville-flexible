@@ -61,3 +61,15 @@ Code is grouped by its subject. Each app follows the same structure:
 
 Assets have been generated thanks to AI.<br>
 It is hardcoded in a JSON list, which is read and loaded in a list at startup.
+
+## Reasoning for the algorithm
+
+My first thoughts was about having a weighted algorithm:
+- computing the cost of activating one kW for an asset
+- rating the asset based on its volume and the requested volume
+
+### Cheapest comes first
+
+You compute a rate from 0 to infinity for each available asset. 
+Being equal to 1 or higher means the requested volume is covered by the current available asset.<br>
+So the cheapest of them all is going to be the selected asset.
