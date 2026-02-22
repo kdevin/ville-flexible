@@ -83,3 +83,8 @@ My first thoughts was about having a weighted algorithm:
 You compute a rate from 0 to infinity for each available asset. 
 Being equal to 1 or higher means the requested volume is covered by the current available asset.<br>
 So the cheapest of them all is going to be the selected asset.
+
+#### Drawbacks
+
+The obvious drawback is that the sum of two smaller assets might be cheaper 
+than the cheapest asset covering the request volume.
