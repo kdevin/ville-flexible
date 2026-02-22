@@ -5,26 +5,59 @@
 
 Ville Flexible is a FastAPI service handling TSO requests.
 
-Project structure is inspired by [Netflix Dispatch](https://github.com/Netflix/dispatch).
+# Getting started
 
-## Useful commands
+## Configure your environment
 
-### Create the virtualenv
+First, create your virtualenv and activate it
 
     virtualenv ville-flexible
-
-### Activate the virtualenv
-
     source ville-flexible/bin/activate
 
-### Install your dependencies from pyproject.toml
+Then, install your dependencies from pyproject.toml
 
     pip install .
 
-### Install your optional dependencies from pyproject.toml
+You can also install your optional dependencies
 
     pip install .[test]
 
-### Execute pre-commit
+## Run the project
+
+Start your FastAPI server
+
+    fastapi run ville_flexible/main.py
+
+Server is started at: http://127.0.0.1:8000<br>
+Access to the Swagger docs at: http://127.0.0.1:8000/docs
+
+## Useful commands
+
+Execute pre-commit
 
     pre-commit run --all-files
+
+Start your FastAPI server and watch for changes
+
+    fastapi dev ville_flexible/main.py
+
+# Implementation and reasoning
+
+## Project structure
+
+Project structure is inspired by [Netflix Dispatch](https://github.com/Netflix/dispatch).
+
+`main.py` creates the FastAPi server object.<br>
+`api.py` creates the main router by grouping all application routers.<br>
+`dependencies.py` declares service dependencies so that dependency injection is possible.<br>
+`logging.py` takes care of the logging configuration.<br>
+
+Code is grouped by its subject. Each app follows the same structure:
+- `views.py` is the API, declaring its own router
+- `service.py` is focused on business logic and data access
+- `models.py` is the data layer
+
+## Data
+
+Assets have been generated thanks to AI.<br>
+It is hardcoded in a JSON list, which is read and loaded in a list at startup.
