@@ -1,8 +1,11 @@
+import logging
 from abc import ABC, abstractmethod
 
 from ville_flexible.activation.models import ActivationRequest
 from ville_flexible.asset.models import AvailableAsset
 from ville_flexible.asset.service import AssetService
+
+logger = logging.getLogger(__name__)
 
 
 class AbstractActivationStrategy(ABC):
@@ -59,6 +62,6 @@ class ActivationService:
         Returns:
             list[AvailableAsset]: A list of available assets that should be activated to meet the request.
         """
-        available_assets = self.asset_service.get_available_assets(activation_request.date)
+        available_assets = self.asset_service.list_available(activation_request.date)
 
         return self.strategy.select_available_assets(activation_request, available_assets)

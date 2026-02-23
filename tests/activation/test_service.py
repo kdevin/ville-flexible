@@ -2,33 +2,34 @@ import pytest
 
 from ville_flexible.activation.models import ActivationRequest
 from ville_flexible.activation.service import ActivationService, CheapestAssetCoveringRequestVolumeStrategy
-from ville_flexible.asset.models import Asset
+from ville_flexible.asset.service import AssetService
 
 
 @pytest.mark.parametrize(
     "activation_request, expected_asset_code",
     [
-        (ActivationRequest(date=1, volume=5), "FAN025"),
-        (ActivationRequest(date=1, volume=10), "FAN020"),
-        (ActivationRequest(date=1, volume=20), "WEL031"),
-        (ActivationRequest(date=1, volume=30), "MIX029"),
-        (ActivationRequest(date=1, volume=50), "PMP016"),
-        (ActivationRequest(date=2, volume=10), "FAN020"),
-        (ActivationRequest(date=3, volume=25), "MTR022"),
-        (ActivationRequest(date=4, volume=30), "MIX029"),
-        (ActivationRequest(date=5, volume=18), "WEL011"),
-        (ActivationRequest(date=6, volume=25), "MTR022"),
-        (ActivationRequest(date=7, volume=5), "FAN025"),
+        (ActivationRequest(date=1, volume=5), "ASSET001"),
+        (ActivationRequest(date=1, volume=10), "ASSET001"),
+        (ActivationRequest(date=1, volume=20), "ASSET001"),
+        (ActivationRequest(date=1, volume=30), "ASSET001"),
+        (ActivationRequest(date=1, volume=50), "ASSET001"),
+        (ActivationRequest(date=2, volume=10), "ASSET001"),
+        (ActivationRequest(date=3, volume=25), "ASSET001"),
+        (ActivationRequest(date=4, volume=30), "ASSET002"),
+        (ActivationRequest(date=5, volume=18), "ASSET002"),
+        (ActivationRequest(date=6, volume=25), "ASSET002"),
+        (ActivationRequest(date=7, volume=5), "ASSET003"),
     ],
 )
 def test_minimize_total_cost_strategy(
-    assets: list[Asset], activation_request: ActivationRequest, expected_asset_code: str
+    asset_service: AssetService, activation_request: ActivationRequest, expected_asset_code: str
 ):
     # Arrange
+    available_assets = asset_service.list(activation_request.date)
     strategy = CheapestAssetCoveringRequestVolumeStrategy()
 
     # Act
-    selected_assets = strategy.select_available_assets(activation_request, assets)
+    selected_assets = strategy.select_available_assets(activation_request, available_assets)
 
     # Assert
     assert len(selected_assets) == 1

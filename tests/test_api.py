@@ -9,9 +9,6 @@ async def trigger_error():
     raise Exception("Something went wrong")
 
 
-client = TestClient(app, raise_server_exceptions=False)
-
-
 def test_healthcheck(client: TestClient):
     # Act
     response = client.get("/healthcheck")
@@ -30,7 +27,7 @@ def test_helloworld(client: TestClient):
     assert response.json() == "Hello World!"
 
 
-def test_exception_handler():
+def test_exception_handler(client: TestClient):
     # Make a request to the endpoint that raises an exception
     response = client.get("/error")
 
