@@ -5,4 +5,4 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env")
 
     log_level: str = "INFO"
-    strategy: str = "cheapest_asset_covering_request_volume"
+    strategy: str = "cheapest_kilowatt_activation_cost"

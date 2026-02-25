@@ -3,7 +3,11 @@ import pytest
 from ville_flexible.asset.service import AssetService
 from ville_flexible.config import Settings
 from ville_flexible.dependencies import get_assets_from_db, get_activation_service
-from ville_flexible.activation.service import CheapestAssetCoveringRequestVolumeStrategy
+from ville_flexible.activation.service import (
+    CheapestAssetCoveringRequestVolumeStrategy,
+    CheapestKilowattActivationCostStrategy,
+    CheapestSumAssetCoveringRequestVolumeStrategy,
+)
 
 
 def test_get_assets_from_db():
@@ -18,15 +22,35 @@ def test_get_assets_from_db():
     "strategy, strategy_class",
     [
         (
+            None,
+            CheapestKilowattActivationCostStrategy,
+        ),
+        (
             "cheapest_asset_covering_request_volume",
             CheapestAssetCoveringRequestVolumeStrategy,
-        )
+        ),
+        (
+            "cheapest_sum_asset_covering_request_volume",
+            CheapestSumAssetCoveringRequestVolumeStrategy,
+        ),
+        (
+            "cheapest_kilowatt_activation_cost",
+            CheapestKilowattActivationCostStrategy,
+        ),
     ],
-    ids=["CheapestAssetCoveringRequestVolumeStrategy"],
+    ids=[
+        "Default strategy (cheapest_kilowatt_activation_cost)",
+        "CheapestAssetCoveringRequestVolumeStrategy",
+        "CheapestKilowattActivationCostStrategy",
+        "CheapestSumAssetCoveringRequestVolumeStrategy",
+    ],
 )
 def test_get_activation_service(asset_service: AssetService, strategy: str, strategy_class: type):
     # Arrange
-    settings = Settings(strategy=strategy)
+    if not strategy:
+        settings = Settings()
+    else:
+        settings = Settings(strategy=strategy)
 
     # Act
     activation_service = get_activation_service(settings, asset_service)

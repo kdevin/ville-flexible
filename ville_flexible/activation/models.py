@@ -1,4 +1,6 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, computed_field
+
+from ville_flexible.asset.models import AvailableAsset
 
 
 class ActivationRequest(BaseModel):
@@ -12,3 +14,24 @@ class ActivationRequest(BaseModel):
 
     date: int
     volume: int
+
+
+class ActivationResponse(BaseModel):
+    """
+    Represents the response for an activation request, containing the list of assets to be activated.
+
+    Attributes:
+        assets (list[AvailableAsset]): A list of available assets that should be activated to meet the request.
+    """
+
+    assets: list[AvailableAsset]
+
+    @computed_field
+    @property
+    def total_activation_cost(self) -> float:
+        return sum(asset.activation_cost for asset in self.assets)
+
+    @computed_field
+    @property
+    def total_volume(self) -> int:
+        return sum(asset.volume for asset in self.assets)

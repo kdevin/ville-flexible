@@ -1,42 +1,14 @@
 import pytest
 
+from ville_flexible.activation.exceptions import StrategyNotCoveringRequestedVolumeException
 from ville_flexible.activation.models import ActivationRequest
-from ville_flexible.activation.service import ActivationService, CheapestAssetCoveringRequestVolumeStrategy
-from ville_flexible.asset.service import AssetService
-
-
-@pytest.mark.parametrize(
-    "activation_request, expected_asset_code",
-    [
-        (ActivationRequest(date=1, volume=5), "ASSET001"),
-        (ActivationRequest(date=1, volume=10), "ASSET001"),
-        (ActivationRequest(date=1, volume=20), "ASSET001"),
-        (ActivationRequest(date=1, volume=30), "ASSET001"),
-        (ActivationRequest(date=1, volume=50), "ASSET001"),
-        (ActivationRequest(date=2, volume=10), "ASSET001"),
-        (ActivationRequest(date=3, volume=25), "ASSET001"),
-        (ActivationRequest(date=4, volume=30), "ASSET002"),
-        (ActivationRequest(date=5, volume=18), "ASSET002"),
-        (ActivationRequest(date=6, volume=25), "ASSET002"),
-        (ActivationRequest(date=7, volume=5), "ASSET003"),
-    ],
+from ville_flexible.activation.service import (
+    ActivationService,
+    CheapestAssetCoveringRequestVolumeStrategy,
+    CheapestKilowattActivationCostStrategy,
+    CheapestSumAssetCoveringRequestVolumeStrategy,
 )
-def test_minimize_total_cost_strategy(
-    asset_service: AssetService, activation_request: ActivationRequest, expected_asset_code: str
-):
-    # Arrange
-    available_assets = asset_service.list(activation_request.date)
-    strategy = CheapestAssetCoveringRequestVolumeStrategy()
-
-    # Act
-    selected_assets = strategy.select_available_assets(activation_request, available_assets)
-
-    # Assert
-    assert len(selected_assets) == 1
-
-    selected_asset = selected_assets[0]
-    assert selected_asset.rate_requested_volume(activation_request.volume) >= 1
-    assert selected_asset.code == expected_asset_code
+from ville_flexible.asset.service import AssetService
 
 
 def test_activation_service(activation_service: ActivationService):
@@ -50,3 +22,165 @@ def test_assets_selection(activation_service: ActivationService, activation_requ
 
     # Assert
     assert selected_assets is not None
+
+
+@pytest.mark.parametrize(
+    "activation_request, expected_activation_cost",
+    [
+        (ActivationRequest(date=1, volume=5), 100.0),
+        (ActivationRequest(date=1, volume=10), 100.0),
+        (ActivationRequest(date=1, volume=20), 100.0),
+        (ActivationRequest(date=1, volume=30), 100.0),
+        (ActivationRequest(date=1, volume=50), 100.0),
+        (ActivationRequest(date=2, volume=10), 100.0),
+        (ActivationRequest(date=3, volume=25), 100.0),
+        (ActivationRequest(date=4, volume=30), 150.0),
+        (ActivationRequest(date=5, volume=18), 150.0),
+        (ActivationRequest(date=6, volume=25), 150.0),
+        (ActivationRequest(date=7, volume=5), 200.0),
+    ],
+)
+def test_cheapest_asset_covering_request_volume_strategy(
+    asset_service: AssetService, activation_request: ActivationRequest, expected_activation_cost: int
+):
+    # Arrange
+    available_assets = asset_service.list(activation_request.date)
+    strategy = CheapestAssetCoveringRequestVolumeStrategy()
+
+    # Act
+    selected_assets = strategy.select_available_assets(activation_request, available_assets)
+
+    # Assert
+    assert len(selected_assets) == 1
+    assert sum(asset.activation_cost for asset in selected_assets) == expected_activation_cost
+
+
+@pytest.mark.parametrize(
+    "activation_request",
+    [
+        ActivationRequest(date=1, volume=101),
+        ActivationRequest(date=2, volume=101),
+        ActivationRequest(date=3, volume=101),
+        ActivationRequest(date=4, volume=101),
+        ActivationRequest(date=5, volume=101),
+        ActivationRequest(date=6, volume=101),
+        ActivationRequest(date=7, volume=101),
+    ],
+)
+def test_cheapest_asset_covering_request_volume_strategy_exception(
+    asset_service: AssetService, activation_request: ActivationRequest
+):
+    # Arrange
+    available_assets = asset_service.list(activation_request.date)
+    strategy = CheapestAssetCoveringRequestVolumeStrategy()
+
+    # Act & Assert
+    with pytest.raises(StrategyNotCoveringRequestedVolumeException):
+        strategy.select_available_assets(activation_request, available_assets)
+
+
+@pytest.mark.parametrize(
+    "activation_request, expected_length, expected_activation_cost",
+    [
+        (ActivationRequest(date=1, volume=50), 1, 100.0),
+        (ActivationRequest(date=1, volume=101), 2, 300.0),
+        (ActivationRequest(date=1, volume=149), 2, 300.0),
+        (ActivationRequest(date=1, volume=150), 2, 300.0),
+        (ActivationRequest(date=2, volume=150), 2, 300.0),
+        (ActivationRequest(date=3, volume=150), 2, 300.0),
+        (ActivationRequest(date=4, volume=150), 2, 350.0),
+        (ActivationRequest(date=5, volume=150), 2, 350.0),
+        (ActivationRequest(date=6, volume=150), 2, 350.0),
+        (ActivationRequest(date=7, volume=100), 1, 200.0),
+    ],
+)
+def test_cheapest_sum_asset_covering_request_volume_strategy(
+    asset_service: AssetService,
+    activation_request: ActivationRequest,
+    expected_length: int,
+    expected_activation_cost: float,
+):
+    # Arrange
+    available_assets = asset_service.list(activation_request.date)
+    strategy = CheapestSumAssetCoveringRequestVolumeStrategy()
+
+    # Act
+    try:
+        selected_assets = strategy.select_available_assets(activation_request, available_assets)
+    except StrategyNotCoveringRequestedVolumeException:
+        pytest.fail("Strategy should cover the request volume")
+
+    # Assert
+    assert len(selected_assets) == expected_length
+    assert sum(asset.activation_cost for asset in selected_assets) == expected_activation_cost
+
+
+@pytest.mark.parametrize(
+    "activation_request",
+    [
+        ActivationRequest(date=1, volume=49),
+        ActivationRequest(date=1, volume=51),
+        ActivationRequest(date=1, volume=151),
+    ],
+)
+def test_cheapest_sum_asset_covering_request_volume_strategy_exception(
+    asset_service: AssetService, activation_request: ActivationRequest
+):
+    # Arrange
+    available_assets = asset_service.list(activation_request.date)
+    strategy = CheapestSumAssetCoveringRequestVolumeStrategy()
+
+    # Act & Assert
+    with pytest.raises(StrategyNotCoveringRequestedVolumeException):
+        strategy.select_available_assets(activation_request, available_assets)
+
+
+@pytest.mark.parametrize(
+    "activation_request, expected_length, expected_activation_cost",
+    [
+        (ActivationRequest(date=1, volume=49), 1, 100.0),
+        (ActivationRequest(date=1, volume=50), 1, 100.0),
+        (ActivationRequest(date=1, volume=51), 1, 200.0),
+        (ActivationRequest(date=1, volume=101), 2, 300.0),
+        (ActivationRequest(date=1, volume=149), 2, 300.0),
+        (ActivationRequest(date=1, volume=150), 2, 300.0),
+    ],
+)
+def test_cheapest_kilowatt_activation_cost_strategy(
+    asset_service: AssetService,
+    activation_request: ActivationRequest,
+    expected_length: int,
+    expected_activation_cost: float,
+):
+    # Arrange
+    available_assets = asset_service.list(activation_request.date)
+    strategy = CheapestKilowattActivationCostStrategy()
+
+    # Act
+    try:
+        selected_assets = strategy.select_available_assets(activation_request, available_assets)
+    except StrategyNotCoveringRequestedVolumeException:
+        pytest.fail("Strategy should cover the request volume")
+
+    # Assert
+    assert len(selected_assets) == expected_length
+    assert sum(asset.activation_cost for asset in selected_assets) == expected_activation_cost
+
+
+
+@pytest.mark.parametrize(
+    "activation_request",
+    [
+        ActivationRequest(date=1, volume=151),
+    ],
+)
+def test_cheapest_kilowatt_activation_cost_strategy_exception(
+    asset_service: AssetService, activation_request: ActivationRequest
+):
+    # Arrange
+    available_assets = asset_service.list(activation_request.date)
+    strategy = CheapestKilowattActivationCostStrategy()
+
+    # Act & Assert
+    with pytest.raises(StrategyNotCoveringRequestedVolumeException):
+        strategy.select_available_assets(activation_request, available_assets)

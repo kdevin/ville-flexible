@@ -6,6 +6,8 @@ from fastapi import Depends
 from ville_flexible.activation.service import (
     ActivationService,
     CheapestAssetCoveringRequestVolumeStrategy,
+    CheapestKilowattActivationCostStrategy,
+    CheapestSumAssetCoveringRequestVolumeStrategy,
 )
 from ville_flexible.asset.models import Asset
 from ville_flexible.asset.service import AssetService
@@ -40,6 +42,10 @@ def get_activation_service(settings: SettingsDep, asset_service: AssetServiceDep
     match settings.strategy:
         case "cheapest_asset_covering_request_volume":
             selected_strategy = CheapestAssetCoveringRequestVolumeStrategy()
+        case "cheapest_sum_asset_covering_request_volume":
+            selected_strategy = CheapestSumAssetCoveringRequestVolumeStrategy()
+        case "cheapest_kilowatt_activation_cost":
+            selected_strategy = CheapestKilowattActivationCostStrategy()
         case _:
             raise ValueError(f"Unknown strategy: {settings.strategy}")
 
