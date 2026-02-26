@@ -97,7 +97,9 @@ You then compute the kilowatt price for each asset. You pick the cheapest prices
 
 #### Drawbacks
 
-If you do the sum of all your assets having a rate lower to 1, your requested volume might not be covered.
+If you do the sum of all your assets having a rate lower to 1, your requested volume might not be covered.<br>
+Also, you only consider kilowatt price for each asset.
+So a cheap asset might provide too much volume compared to others, while you only need a portion of it
 
 ### Best of both wolrds
 
