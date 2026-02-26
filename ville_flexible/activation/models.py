@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic import BaseModel, computed_field
 
 from ville_flexible.asset.models import AvailableAsset
@@ -12,7 +14,7 @@ class ActivationRequest(BaseModel):
         volume (int): The volume to be activated on the specified date.
     """
 
-    date: int
+    date: Literal[1, 2, 3, 4, 5, 6, 7]
     volume: int
 
 

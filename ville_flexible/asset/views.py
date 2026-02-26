@@ -1,14 +1,14 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
-from ville_flexible.asset.models import Asset
+from ville_flexible.asset.models import Asset, WeekDay
 from ville_flexible.dependencies import AssetServiceDep
 
 router = APIRouter(tags=["assets"], prefix="/assets")
 
 
 @router.get("/", response_model=list[Asset])
-def list(asset_service: AssetServiceDep, week_day: int | None = None):
+def list(asset_service: AssetServiceDep, week_day: WeekDay | None = None):
     return asset_service.list(week_day=week_day)
 
 

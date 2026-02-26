@@ -1,19 +1,8 @@
-from typing import Annotated
+from typing import Annotated, Literal
 
-from pydantic import AfterValidator, BaseModel
+from pydantic import BaseModel, BeforeValidator
 
-
-def week_days(values: list[int]) -> bool:
-    """
-    Validates that the given values is are valid days of the week (1-7).
-
-    Args:
-        values (list[int]): The list of values to validate.
-    """
-    if any(not (1 <= value <= 7) for value in values):
-        raise ValueError("Invalid availability: days must be between 1 and 7")
-
-    return values
+WeekDay = Annotated[Literal[1, 2, 3, 4, 5, 6, 7], BeforeValidator(int)]
 
 
 class BaseAsset(BaseModel):
@@ -74,9 +63,9 @@ class Asset(BaseAsset):
         volume (int): The volume of the asset.
     """
 
-    availability: Annotated[list[int], AfterValidator(week_days)]
+    availability: list[WeekDay]
 
-    def is_available_on_date(self, date: int) -> bool:
+    def is_available_on_date(self, date: WeekDay) -> bool:
         """
         Checks if the asset is available on a given date.
 
