@@ -25,6 +25,9 @@ test = [
 branch = true
 command_line = "-m pytest"
 source = ["ville_flexible"]
+omit = [
+    "tests/*",
+]
 
 [tool.coverage.report]
 show_missing = true
@@ -32,9 +35,6 @@ fail_under = 80
 exclude_lines = [
     "pragma: no cover",
     "@abstract",
-]
-omit = [
-    "*/tests/*",
 ]
 
 [tool.ruff]
