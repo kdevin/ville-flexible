@@ -80,11 +80,25 @@ My first thoughts was about having a weighted algorithm:
 
 ### Cheapest comes first
 
-You compute a rate from 0 to infinity for each available asset. 
+You compute a rate from 0 to infinity for each available asset, i.e. volume divided by requested volume.
 Being equal to 1 or higher means the requested volume is covered by the current available asset.<br>
 So the cheapest of them all is going to be the selected asset.
 
 #### Drawbacks
 
-The obvious drawback is that the sum of two smaller assets might be cheaper 
-than the cheapest asset covering the request volume.
+The sum of two smaller assets might be cheaper than the cheapest asset covering the request volume.
+
+### Cheapest sum of assets
+
+You compute a rate from 0 to infinity for each available asset, i.e. volume divided by requested volume.
+Being lower to 1 means the requested volume is covered by a sum of available assets.<br>
+You then compute the kilowatt price for each asset. You pick the cheapest prices until you reach the requested volume.
+
+#### Drawbacks
+
+If you do the sum of all your assets having a rate lower to 1, your requested volume might not be covered.
+
+### Best of both wolrds
+
+You combine the two strategies and make them compete against each other.
+The lower activation cost wins. In some cases, only one might be applicable, so it wins by default.
