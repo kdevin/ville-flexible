@@ -88,6 +88,7 @@ def test_delete(client: TestClient, assets: list[Asset]):
     assert response.status_code == 200
     assert response.json() is None
 
+
 def test_delete_unknown_asset(client: TestClient, assets: list[Asset]):
     # Arrange
 

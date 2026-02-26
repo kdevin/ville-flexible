@@ -120,9 +120,7 @@ def test_available_asset_invalid_data(code, name, activation_cost, volume):
 
 def test_available_asset_from_asset():
     # Arrange
-    asset = Asset(
-        code="A1", name="Asset 1", activation_cost=100.0, availability=[1, 2, 3], volume=10
-    )
+    asset = Asset(code="A1", name="Asset 1", activation_cost=100.0, availability=[1, 2, 3], volume=10)
 
     # Act
     available_asset = AvailableAsset.from_asset(asset)

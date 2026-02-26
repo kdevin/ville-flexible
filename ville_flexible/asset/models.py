@@ -59,7 +59,7 @@ class BaseAsset(BaseModel):
         if requested_volume == 0:
             return 0
 
-        return (self.volume / requested_volume)
+        return self.volume / requested_volume
 
 
 class Asset(BaseAsset):

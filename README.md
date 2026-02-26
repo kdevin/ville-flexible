@@ -66,6 +66,7 @@ Code is grouped by its subject. Each app follows the same structure:
 - `views.py` is the API, declaring its own router
 - `service.py` is focused on business logic and data access
 - `models.py` is the data layer
+- `exceptions.py` contains custom exceptions
 
 ## Data
 

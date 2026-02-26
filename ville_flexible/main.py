@@ -27,7 +27,7 @@ app.include_router(api_router)
 
 
 @app.exception_handler(StrategyNotCoveringRequestedVolumeException)
-async def unicorn_exception_handler(request: Request, exc: StrategyNotCoveringRequestedVolumeException):
+async def strategy_exception_handler(request: Request, exc: StrategyNotCoveringRequestedVolumeException):
     return JSONResponse(
         status_code=422,
         content={"message": str(exc)},

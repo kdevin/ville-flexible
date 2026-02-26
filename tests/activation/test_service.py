@@ -167,7 +167,6 @@ def test_cheapest_kilowatt_activation_cost_strategy(
     assert sum(asset.activation_cost for asset in selected_assets) == expected_activation_cost
 
 
-
 @pytest.mark.parametrize(
     "activation_request",
     [

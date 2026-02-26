@@ -1,4 +1,3 @@
-
 from fastapi.testclient import TestClient
 
 from ville_flexible.activation.models import ActivationRequest
